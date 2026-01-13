@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { TokenScraperService } from '../services';
 import { ScraperConfig } from '../types';
+import { generateMockTokens, generateMockTrendingTokens } from './mockData';
 
 export function createApp(config: ScraperConfig): express.Application {
   const app = express();
@@ -40,6 +41,30 @@ export function createApp(config: ScraperConfig): express.Application {
       });
     } catch (error) {
       console.error('Error fetching tokens:', error);
+      res.status(500).json({
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  });
+
+  // Get mock/demo tokens for testing
+  app.get('/api/tokens/demo', (req: Request, res: Response) => {
+    try {
+      const count = parseInt(req.query.count as string) || 10;
+      const tokens = generateMockTrendingTokens(count);
+      
+      res.json({
+        success: true,
+        mode: 'demo',
+        count: tokens.length,
+        tokens,
+        stats: scraperService.getTokenStats(tokens),
+        timestamp: new Date().toISOString(),
+        note: 'This is demo data. Configure API keys in .env for real data.',
+      });
+    } catch (error) {
+      console.error('Error generating demo tokens:', error);
       res.status(500).json({
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -191,6 +216,7 @@ export function createApp(config: ScraperConfig): express.Application {
       endpoints: {
         health: 'GET /health',
         allTokens: 'GET /api/tokens?sortBy=volume&limit=100',
+        demoTokens: 'GET /api/tokens/demo?count=10',
         byChain: 'GET /api/tokens/:chain (ethereum|solana|bnb)',
         dexscreener: 'GET /api/sources/dexscreener',
         birdeye: 'GET /api/sources/birdeye',

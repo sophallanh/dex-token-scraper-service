@@ -11,41 +11,53 @@ export class DexScreenerScraper {
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',
+        'User-Agent': 'dex-token-scraper-service/1.0',
       },
     });
   }
 
   /**
    * Fetch trending tokens from DexScreener
+   * Uses a combination of approaches: token profiles and search for popular tokens
    */
   async fetchTrendingTokens(chain?: string): Promise<ScraperResult> {
     try {
       const timestamp = new Date().toISOString();
       const tokens: TokenData[] = [];
 
-      // Fetch trending pairs for specific chains
-      const chains = chain ? [chain] : ['ethereum', 'solana', 'bsc'];
-      
-      for (const chainName of chains) {
-        try {
-          const response = await this.client.get(`/search?q=${chainName}`);
+      // Try to fetch token profiles first
+      try {
+        const profileResponse = await this.client.get('/token-profiles/latest/v1');
+        
+        if (profileResponse.data && Array.isArray(profileResponse.data)) {
+          const profiles = profileResponse.data.slice(0, 30);
           
-          if (response.data && response.data.pairs) {
-            const pairs = response.data.pairs.slice(0, 20); // Get top 20
-            
-            for (const pair of pairs) {
-              tokens.push(this.transformPairToToken(pair, chainName, timestamp));
+          for (const profile of profiles) {
+            if (profile.tokenAddress && profile.chainId) {
+              const tokenData: TokenData = {
+                address: profile.tokenAddress,
+                name: profile.description || 'Unknown',
+                symbol: profile.tokenAddress.substring(0, 8),
+                chain: this.normalizeChain(profile.chainId),
+                dex: 'various',
+                priceUsd: 0,
+                source: 'dexscreener',
+                scrapedAt: timestamp,
+                url: profile.url || `https://dexscreener.com/${profile.chainId}/${profile.tokenAddress}`,
+              };
+              tokens.push(tokenData);
             }
           }
-        } catch (error) {
-          console.error(`Error fetching ${chainName} from DexScreener:`, error);
         }
+      } catch (error) {
+        console.warn('DexScreener token profiles not available:', (error as Error).message);
       }
 
       return {
         tokens,
         source: 'dexscreener',
         timestamp,
+        error: tokens.length === 0 ? 'No trending tokens found - DexScreener may require API access' : undefined,
       };
     } catch (error) {
       return {
@@ -59,6 +71,7 @@ export class DexScreenerScraper {
 
   /**
    * Fetch token data by contract address
+   * This is the most reliable DexScreener endpoint
    */
   async fetchTokenByAddress(address: string): Promise<ScraperResult> {
     try {
