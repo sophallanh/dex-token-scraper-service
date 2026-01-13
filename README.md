@@ -54,7 +54,8 @@ Edit `.env` and configure your settings:
 # Server Configuration
 PORT=3000
 
-# API Keys
+# API Keys - NEVER commit these to git or share publicly!
+# See SECURITY.md for important security information
 DEXSCREENER_API_KEY=your_dexscreener_api_key_here
 BIRDEYE_API_KEY=your_birdeye_api_key_here
 MOONARCH_API_KEY=your_moonarch_api_key_here
@@ -73,6 +74,8 @@ GITHUB_ENABLED=false
 GITHUB_TOKEN=your_github_token_here
 GITHUB_REPO=username/drip-dex-launches
 ```
+
+> **🔐 SECURITY WARNING**: Never commit API keys to git or share them publicly! See [SECURITY.md](SECURITY.md) for important security information.
 
 > **Note**: API keys are optional but recommended for higher rate limits and full functionality.
 
