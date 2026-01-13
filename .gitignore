@@ -27,12 +27,6 @@ coverage
 
 # Output directory for scraped data
 output/
-*.json
-*.md
-!README.md
-!CONTRIBUTING.md
-!API_EXAMPLES.md
-!PROJECT_SUMMARY.md
 
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
