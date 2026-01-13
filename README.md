@@ -31,7 +31,7 @@ An automated token scraper service that fetches new and trending token launches 
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/sophallanh/dex-token-scraper-service.git
 cd dex-token-scraper-service
 ```
 

@@ -36,8 +36,8 @@ export class DexScreenerScraper {
             if (profile.tokenAddress && profile.chainId) {
               const tokenData: TokenData = {
                 address: profile.tokenAddress,
-                name: profile.description || 'Unknown',
-                symbol: profile.tokenAddress.substring(0, 8),
+                name: profile.name || profile.tokenAddress.substring(0, 8),
+                symbol: profile.symbol || profile.tokenAddress.substring(0, 8),
                 chain: this.normalizeChain(profile.chainId),
                 dex: 'various',
                 priceUsd: 0,

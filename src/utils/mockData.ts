@@ -74,8 +74,11 @@ export function generateMockTrendingTokens(count: number = 10): TokenData[] {
     const chain = chains[i % chains.length];
     const dex = dexes[i % dexes.length];
     
+    // Generate valid Ethereum-style addresses (42 chars with 0x prefix)
+    const address = `0x${i.toString(16).padStart(40, '0')}`;
+    
     mockTokens.push({
-      address: `0x${i.toString().padStart(40, '0')}`,
+      address,
       name: `Trending Token ${i + 1}`,
       symbol: `TRD${i + 1}`,
       chain,

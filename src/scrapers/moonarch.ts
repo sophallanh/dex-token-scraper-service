@@ -1,6 +1,19 @@
 import axios, { AxiosInstance } from 'axios';
 import { TokenData, ScraperResult } from '../types';
 
+/**
+ * Moonarch Scraper - PLACEHOLDER IMPLEMENTATION
+ * 
+ * NOTE: This is a template implementation as Moonarch's actual API structure
+ * may differ. Update this implementation based on actual Moonarch API documentation
+ * when available. The endpoints and data structures used here are hypothetical.
+ * 
+ * To use this scraper in production:
+ * 1. Obtain Moonarch API documentation
+ * 2. Update the base URL and endpoints
+ * 3. Adjust authentication mechanism if needed
+ * 4. Update response data transformation logic
+ */
 export class MoonarchScraper {
   private client: AxiosInstance;
   private baseUrl = 'https://api.moonarch.app'; // Hypothetical endpoint
