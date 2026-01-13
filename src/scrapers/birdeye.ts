@@ -132,7 +132,7 @@ export class BirdeyeScraper {
   /**
    * Transform Birdeye token data to our TokenData format
    */
-  private transformTokenData(token: any, timestamp: string): TokenData {
+  private transformTokenData(token: Record<string, any>, timestamp: string): TokenData {
     return {
       address: token.address || '',
       name: token.name || 'Unknown',
@@ -154,7 +154,7 @@ export class BirdeyeScraper {
   /**
    * Transform Birdeye token overview to our TokenData format
    */
-  private transformTokenOverview(data: any, timestamp: string): TokenData {
+  private transformTokenOverview(data: Record<string, any>, timestamp: string): TokenData {
     return {
       address: data.address || '',
       name: data.name || 'Unknown',

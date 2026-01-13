@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { TokenScraperService } from '../services';
 import { ScraperConfig } from '../types';
-import { generateMockTokens, generateMockTrendingTokens } from './mockData';
+import { generateMockTrendingTokens } from './mockData';
 
 export function createApp(config: ScraperConfig): express.Application {
   const app = express();
@@ -25,7 +25,7 @@ export function createApp(config: ScraperConfig): express.Application {
       const uniqueTokens = scraperService.removeDuplicates(tokens);
       const sortedTokens = scraperService.sortTokens(
         uniqueTokens,
-        (req.query.sortBy as any) || 'volume'
+        (req.query.sortBy as 'volume' | 'liquidity' | 'marketCap' | 'priceChange') || 'volume'
       );
       const limitedTokens = scraperService.getTopTokens(
         sortedTokens,
@@ -88,7 +88,7 @@ export function createApp(config: ScraperConfig): express.Application {
       const chainTokens = scraperService.filterByChain(uniqueTokens, chain);
       const sortedTokens = scraperService.sortTokens(
         chainTokens,
-        (req.query.sortBy as any) || 'volume'
+        (req.query.sortBy as 'volume' | 'liquidity' | 'marketCap' | 'priceChange') || 'volume'
       );
       const limitedTokens = scraperService.getTopTokens(
         sortedTokens,

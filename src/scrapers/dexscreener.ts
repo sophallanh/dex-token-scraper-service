@@ -20,7 +20,7 @@ export class DexScreenerScraper {
    * Fetch trending tokens from DexScreener
    * Uses a combination of approaches: token profiles and search for popular tokens
    */
-  async fetchTrendingTokens(chain?: string): Promise<ScraperResult> {
+  async fetchTrendingTokens(): Promise<ScraperResult> {
     try {
       const timestamp = new Date().toISOString();
       const tokens: TokenData[] = [];
@@ -103,7 +103,7 @@ export class DexScreenerScraper {
   /**
    * Transform DexScreener pair data to our TokenData format
    */
-  private transformPairToToken(pair: any, chain: string, timestamp: string): TokenData {
+  private transformPairToToken(pair: Record<string, any>, chain: string, timestamp: string): TokenData {
     const normalizedChain = this.normalizeChain(chain);
     
     return {
@@ -127,7 +127,7 @@ export class DexScreenerScraper {
   /**
    * Detect chain from pair data
    */
-  private detectChain(pair: any): string {
+  private detectChain(pair: Record<string, any>): string {
     const chainId = pair.chainId?.toLowerCase() || '';
     
     if (chainId.includes('ethereum') || chainId === 'ether') return 'ethereum';

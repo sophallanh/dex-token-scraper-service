@@ -102,7 +102,7 @@ export class MoonarchScraper {
   /**
    * Transform Moonarch token data to our TokenData format
    */
-  private transformTokenData(token: any, timestamp: string): TokenData {
+  private transformTokenData(token: Record<string, any>, timestamp: string): TokenData {
     return {
       address: token.address || token.contractAddress || '',
       name: token.name || 'Unknown',
